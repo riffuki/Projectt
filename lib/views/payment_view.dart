@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../controllers/booking_controller.dart';
 import '../models/ticket_model.dart';
 import '../utils/format_currency.dart';
-import '../widgets/custom_button.dart';
 import 'e_ticket_view.dart';
 
 class PaymentView extends StatefulWidget {
@@ -133,10 +132,28 @@ class _PaymentViewState extends State<PaymentView> {
               ),
             ),
             const SizedBox(height: 18),
-            CustomButton(
-              text: 'Bayar Sekarang',
-              icon: Icons.check_circle,
-              onPressed: payNow,
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton.icon(
+                onPressed: payNow,
+                icon: const Icon(Icons.check_circle),
+                label: const Text(
+                  'Bayar Sekarang',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2563EB),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

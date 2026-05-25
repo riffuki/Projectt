@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/ticket_model.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_text_field.dart';
 import 'payment_view.dart';
 
 class PassengerFormView extends StatefulWidget {
@@ -70,35 +68,43 @@ class _PassengerFormViewState extends State<PassengerFormView> {
         padding: const EdgeInsets.all(22),
         child: Column(
           children: [
-            CustomTextField(
-              label: 'Nama Lengkap',
-              hint: 'Masukkan nama penumpang',
+            TextField(
               controller: nameController,
-              icon: Icons.person,
+              decoration: _inputDecoration(
+                label: 'Nama Lengkap',
+                hint: 'Masukkan nama penumpang',
+                icon: Icons.person,
+              ),
             ),
             const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Nomor Identitas',
-              hint: 'KTP / NIK / Kartu Pelajar',
+            TextField(
               controller: identityController,
-              icon: Icons.badge,
               keyboardType: TextInputType.number,
+              decoration: _inputDecoration(
+                label: 'Nomor Identitas',
+                hint: 'KTP / NIK / Kartu Pelajar',
+                icon: Icons.badge,
+              ),
             ),
             const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Nomor HP',
-              hint: 'Masukkan nomor HP',
+            TextField(
               controller: phoneController,
-              icon: Icons.phone,
               keyboardType: TextInputType.phone,
+              decoration: _inputDecoration(
+                label: 'Nomor HP',
+                hint: 'Masukkan nomor HP',
+                icon: Icons.phone,
+              ),
             ),
             const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Email',
-              hint: 'Masukkan email',
+            TextField(
               controller: emailController,
-              icon: Icons.email,
               keyboardType: TextInputType.emailAddress,
+              decoration: _inputDecoration(
+                label: 'Email',
+                hint: 'Masukkan email',
+                icon: Icons.email,
+              ),
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
@@ -130,13 +136,53 @@ class _PassengerFormViewState extends State<PassengerFormView> {
               },
             ),
             const SizedBox(height: 24),
-            CustomButton(
-              text: 'Lanjut Pembayaran',
-              icon: Icons.payment,
-              onPressed: nextToPayment,
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton.icon(
+                onPressed: nextToPayment,
+                icon: const Icon(Icons.payment),
+                label: const Text(
+                  'Lanjut Pembayaran',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2563EB),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration({
+    required String label,
+    required String hint,
+    required IconData icon,
+  }) {
+    return InputDecoration(
+      labelText: label,
+      hintText: hint,
+      prefixIcon: Icon(icon),
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 14,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide.none,
       ),
     );
   }

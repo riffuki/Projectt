@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_text_field.dart';
 import 'ticket_list_view.dart';
 
 class SearchTicketView extends StatefulWidget {
@@ -89,35 +87,43 @@ class _SearchTicketViewState extends State<SearchTicketView> {
               color: Colors.blue,
             ),
             const SizedBox(height: 20),
-            CustomTextField(
-              label: 'Kota Asal',
-              hint: 'Contoh: Makassar',
+            TextField(
               controller: fromController,
-              icon: Icons.location_on,
+              decoration: _inputDecoration(
+                label: 'Kota Asal',
+                hint: 'Contoh: Makassar',
+                icon: Icons.location_on,
+              ),
             ),
             const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Kota Tujuan',
-              hint: 'Contoh: Jakarta',
+            TextField(
               controller: toController,
-              icon: Icons.flag,
+              decoration: _inputDecoration(
+                label: 'Kota Tujuan',
+                hint: 'Contoh: Jakarta',
+                icon: Icons.flag,
+              ),
             ),
             const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Tanggal Berangkat',
-              hint: 'Pilih tanggal',
+            TextField(
               controller: dateController,
-              icon: Icons.calendar_month,
               readOnly: true,
               onTap: pickDate,
+              decoration: _inputDecoration(
+                label: 'Tanggal Berangkat',
+                hint: 'Pilih tanggal',
+                icon: Icons.calendar_month,
+              ),
             ),
             const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Jumlah Penumpang',
-              hint: 'Contoh: 1',
+            TextField(
               controller: passengerController,
-              icon: Icons.group,
               keyboardType: TextInputType.number,
+              decoration: _inputDecoration(
+                label: 'Jumlah Penumpang',
+                hint: 'Contoh: 1',
+                icon: Icons.group,
+              ),
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
@@ -145,10 +151,28 @@ class _SearchTicketViewState extends State<SearchTicketView> {
               },
             ),
             const SizedBox(height: 24),
-            CustomButton(
-              text: 'Cari Tiket',
-              icon: Icons.search,
-              onPressed: searchTicket,
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton.icon(
+                onPressed: searchTicket,
+                icon: const Icon(Icons.search),
+                label: const Text(
+                  'Cari Tiket',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2563EB),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 14),
             Text(
@@ -161,6 +185,28 @@ class _SearchTicketViewState extends State<SearchTicketView> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration({
+    required String label,
+    required String hint,
+    required IconData icon,
+  }) {
+    return InputDecoration(
+      labelText: label,
+      hintText: hint,
+      prefixIcon: Icon(icon),
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 14,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide.none,
       ),
     );
   }
