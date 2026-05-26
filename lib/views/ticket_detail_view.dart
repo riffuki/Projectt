@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/ticket_model.dart';
 import '../utils/format_currency.dart';
-import '../widgets/custom_button.dart';
 import 'passenger_form_view.dart';
 
 class TicketDetailView extends StatelessWidget {
@@ -71,17 +70,35 @@ class TicketDetailView extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24),
-            CustomButton(
-              text: 'Lanjut Isi Data Penumpang',
-              icon: Icons.person,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => PassengerFormView(ticket: ticket),
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PassengerFormView(ticket: ticket),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.person),
+                label: const Text(
+                  'Lanjut Isi Data Penumpang',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                   ),
-                );
-              },
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2563EB),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

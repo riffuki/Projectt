@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/transport_card.dart';
 import 'history_view.dart';
 import 'login_view.dart';
 import 'search_ticket_view.dart';
@@ -114,21 +113,21 @@ class DashboardView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            TransportCard(
+            _transportCard(
               title: 'Pesawat',
               subtitle: 'Cari tiket penerbangan',
               icon: Icons.flight_takeoff,
               color: Colors.blue,
               onTap: () => openSearch(context, 'Pesawat'),
             ),
-            TransportCard(
+            _transportCard(
               title: 'Kereta',
               subtitle: 'Cari tiket perjalanan kereta',
               icon: Icons.train,
               color: Colors.green,
               onTap: () => openSearch(context, 'Kereta'),
             ),
-            TransportCard(
+            _transportCard(
               title: 'Bus',
               subtitle: 'Cari tiket perjalanan bus',
               icon: Icons.directions_bus,
@@ -136,6 +135,61 @@ class DashboardView extends StatelessWidget {
               onTap: () => openSearch(context, 'Bus'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _transportCard({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(18),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 28,
+                backgroundColor: color.withOpacity(0.12),
+                child: Icon(icon, color: color, size: 30),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.chevron_right),
+            ],
+          ),
         ),
       ),
     );

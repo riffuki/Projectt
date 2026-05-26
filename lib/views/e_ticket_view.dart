@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../models/booking_model.dart';
 import '../utils/app_colors.dart';
 import '../utils/format_currency.dart';
-import '../widgets/custom_button.dart';
 import 'dashboard_view.dart';
 import 'history_view.dart';
 
@@ -95,30 +94,65 @@ class ETicketView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 22),
-            CustomButton(
-              text: 'Lihat Riwayat',
-              icon: Icons.history,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HistoryView()),
-                );
-              },
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const HistoryView()),
+                  );
+                },
+                icon: const Icon(Icons.history),
+                label: const Text(
+                  'Lihat Riwayat',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2563EB),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 12),
-            CustomButton(
-              text: 'Kembali ke Dashboard',
-              icon: Icons.home,
-              color: Colors.grey.shade800,
-              onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const DashboardView(email: 'pengguna'),
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const DashboardView(email: 'pengguna'),
+                    ),
+                    (route) => false,
+                  );
+                },
+                icon: const Icon(Icons.home),
+                label: const Text(
+                  'Kembali ke Dashboard',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                   ),
-                  (route) => false,
-                );
-              },
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey.shade800,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

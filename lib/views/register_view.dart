@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../controllers/auth_controller.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_text_field.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -61,33 +59,87 @@ class _RegisterViewState extends State<RegisterView> {
               color: Colors.blue,
             ),
             const SizedBox(height: 24),
-            CustomTextField(
-              label: 'Nama Lengkap',
-              hint: 'Masukkan nama',
+            TextField(
               controller: nameController,
-              icon: Icons.person,
+              decoration: InputDecoration(
+                labelText: 'Nama Lengkap',
+                hintText: 'Masukkan nama',
+                prefixIcon: const Icon(Icons.person),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
             const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Email',
-              hint: 'Masukkan email',
+            TextField(
               controller: emailController,
-              icon: Icons.email,
               keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                hintText: 'Masukkan email',
+                prefixIcon: const Icon(Icons.email),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
             const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Password',
-              hint: 'Masukkan password',
+            TextField(
               controller: passwordController,
-              icon: Icons.lock,
               obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                hintText: 'Masukkan password',
+                prefixIcon: const Icon(Icons.lock),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
             const SizedBox(height: 24),
-            CustomButton(
-              text: 'Daftar',
-              icon: Icons.check_circle,
-              onPressed: register,
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton.icon(
+                onPressed: register,
+                icon: const Icon(Icons.check_circle),
+                label: const Text(
+                  'Daftar',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2563EB),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
