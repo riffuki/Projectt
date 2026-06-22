@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../controllers/auth_controller.dart';
+import 'admin_dashboard_view.dart';
 import 'dashboard_view.dart';
 import 'register_view.dart';
 
@@ -16,6 +17,7 @@ class _LoginViewState extends State<LoginView> {
   final authController = AuthController();
 
   bool isPasswordHidden = true;
+  String selectedRole = 'Konsumen';
 
   void login() {
     final success = authController.login(
@@ -24,10 +26,14 @@ class _LoginViewState extends State<LoginView> {
     );
 
     if (success) {
+      final Widget nextView = selectedRole == 'Admin'
+          ? AdminDashboardView(email: emailController.text)
+          : DashboardView(email: emailController.text);
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => DashboardView(email: emailController.text),
+          builder: (_) => nextView,
         ),
       );
     } else {
@@ -120,6 +126,39 @@ class _LoginViewState extends State<LoginView> {
                     borderSide: BorderSide.none,
                   ),
                 ),
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: selectedRole,
+                decoration: InputDecoration(
+                  labelText: 'Role',
+                  prefixIcon: const Icon(Icons.admin_panel_settings),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                items: const [
+                  DropdownMenuItem(
+                    value: 'Konsumen',
+                    child: Text('Konsumen'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'Admin',
+                    child: Text('Admin'),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    selectedRole = value ?? 'Konsumen';
+                  });
+                },
               ),
               const SizedBox(height: 24),
               SizedBox(

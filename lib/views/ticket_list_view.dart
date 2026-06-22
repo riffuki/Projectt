@@ -4,7 +4,7 @@ import '../models/ticket_model.dart';
 import '../utils/format_currency.dart';
 import 'ticket_detail_view.dart';
 
-class TicketListView extends StatelessWidget {
+class TicketListView extends StatefulWidget {
   final String transportType;
   final String from;
   final String to;
@@ -23,81 +23,115 @@ class TicketListView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final ticketController = TicketController();
-    final tickets = ticketController.searchTickets(
-      transportType: transportType,
-      from: from,
-      to: to,
-      date: date,
-      ticketClass: ticketClass,
-    );
+  State<TicketListView> createState() => _TicketListViewState();
+}
 
+class _TicketListViewState extends State<TicketListView> {
+  late final Future<List<TicketModel>> ticketsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    final ticketController = TicketController();
+    ticketsFuture = ticketController.searchTickets(
+      transportType: widget.transportType,
+      from: widget.from,
+      to: widget.to,
+      date: widget.date,
+      ticketClass: widget.ticketClass,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Daftar Tiket'),
-        centerTitle: true,
-      ),
-      body: tickets.isEmpty
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(28),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.search_off,
-                      size: 80,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Tiket tidak ditemukan',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Coba kosongkan asal, tujuan, atau tanggal agar data dummy muncul.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey.shade600),
-                    ),
-                  ],
+      appBar: AppBar(title: const Text('Daftar Tiket'), centerTitle: true),
+      body: FutureBuilder<List<TicketModel>>(
+        future: ticketsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return _emptyState(
+              icon: Icons.cloud_off,
+              title: 'Gagal mengambil tiket',
+              message: snapshot.error.toString(),
+            );
+          }
+
+          final tickets = snapshot.data ?? [];
+          if (tickets.isEmpty) {
+            return _emptyState(
+              icon: Icons.search_off,
+              title: 'Tiket tidak ditemukan',
+              message:
+                  'Coba kosongkan asal, tujuan, atau tanggal agar data muncul.',
+            );
+          }
+
+          return ListView(
+            padding: const EdgeInsets.all(18),
+            children: [
+              Text(
+                '${widget.transportType} tersedia',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
                 ),
               ),
-            )
-          : ListView(
-              padding: const EdgeInsets.all(18),
-              children: [
-                Text(
-                  '$transportType tersedia',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                  ),
+              const SizedBox(height: 4),
+              Text(
+                'Jumlah penumpang: ${widget.passengerCount}',
+                style: TextStyle(color: Colors.grey.shade600),
+              ),
+              const SizedBox(height: 16),
+              ...tickets.map(
+                (ticket) => _ticketCard(
+                  ticket: ticket,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => TicketDetailView(ticket: ticket),
+                      ),
+                    );
+                  },
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'Jumlah penumpang: $passengerCount',
-                  style: TextStyle(color: Colors.grey.shade600),
-                ),
-                const SizedBox(height: 16),
-                ...tickets.map(
-                  (ticket) => _ticketCard(
-                    ticket: ticket,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => TicketDetailView(ticket: ticket),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _emptyState({
+    required IconData icon,
+    required String title,
+    required String message,
+  }) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(28),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 80, color: Colors.grey),
+            const SizedBox(height: 16),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -110,9 +144,7 @@ class TicketListView extends StatelessWidget {
       elevation: 0,
       margin: const EdgeInsets.only(bottom: 14),
       color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
         onTap: onTap,
@@ -218,23 +250,16 @@ class TicketListView extends StatelessWidget {
     bool alignRight = false,
   }) {
     return Column(
-      crossAxisAlignment:
-          alignRight ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment: alignRight
+          ? CrossAxisAlignment.end
+          : CrossAxisAlignment.start,
       children: [
         Text(
           time,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w900,
-          ),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
         ),
         const SizedBox(height: 4),
-        Text(
-          title,
-          style: TextStyle(
-            color: Colors.grey.shade600,
-          ),
-        ),
+        Text(title, style: TextStyle(color: Colors.grey.shade600)),
       ],
     );
   }
